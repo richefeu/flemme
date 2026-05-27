@@ -1,0 +1,165 @@
+# demo_dispositif.flm
+# Schema de principe d'un dispositif de mesure du frottement :
+#   - bloc inferieur fixe sur table
+#   - bloc superieur mobile avec masse additionnelle m+
+#   - contrepoids m- (cote gauche) via poulie pour regler N
+#   - traction T (cote droit) via capteur de force et poids de sable
+#
+# Utilise les nouvelles primitives : boite, rect, solH, pointilles/continu, vert.
+
+let s = Schema();
+
+# ── Sol / table
+s.gris0;
+s.epaisseur(1.0);
+s.solH(-0.3, 0, 8.3);
+
+# ── Bloc inferieur (fixe) – gris
+s.gris0;
+s.epaisseur(1.2);
+s.boite(0, 0, 8, 2.2);
+s.blanc;
+s.texte(4, 1.1, "Partie inferieure (fixe)");
+
+# ── Plan de contact (tirets)
+s.noir;
+s.epaisseur(0.7);
+s.pointilles;
+s.ligne(-0.2, 2.2, 8.2, 2.2);
+s.continu;
+s.gris1;
+s.gauche;
+s.texte(8.4, 2.4, "plan de");
+s.texte(8.4, 2.1, "contact");
+
+# ── Label N au bord gauche du plan de contact
+s.rouge;
+s.droite;
+s.texte(-0.4, 2.2, "N");
+s.centre;
+
+# ── Bloc superieur (mobile) – bleu
+s.bleu;
+s.epaisseur(1.2);
+s.boite(0, 2.2, 8, 4.5);
+s.blanc;
+s.texte(4, 3.1, "Partie superieure (mobile)");
+s.gris0;
+s.texte(4, 3.8, "poids propre m*");
+
+# ── Masse additionnelle m+
+s.gris1;
+s.epaisseur(1.0);
+s.boite(2.8, 4.5, 5.2, 6.3);
+s.blanc;
+s.texte(4, 5.4, "m+");
+
+# ── Force gravite (m* + m+)g vers le bas
+s.rouge;
+s.tailleVecteur(0.35);
+s.force(4, 8.2, 4, 6.4);
+s.gauche;
+s.texte(4.3, 7.3, "(m*+m+)g");
+s.centre;
+s.tailleVecteur(0);
+
+# ─────────────────────────────────────────────
+# SYSTEME DE LEVAGE (cote gauche)
+# ─────────────────────────────────────────────
+
+# Support poulie gauche (tirets verticaux)
+s.gris1;
+s.epaisseur(0.7);
+s.pointilles;
+s.ligne(-3, 5.2, -3, 7.6);
+s.continu;
+
+# Poulie gauche
+s.noir;
+s.epaisseur(1.0);
+s.cercle(-3, 8.2, 0.65);
+s.disque(-3, 8.2, 0.14);
+s.gris1;
+s.texte(-3, 9.1, "poulie");
+
+# Contrepoids m-
+s.gris1;
+s.epaisseur(1.0);
+s.boite(-5, 4.8, -1, 6.6);
+s.blanc;
+s.texte(-3, 5.7, "m-");
+
+# Fils de levage
+s.noir;
+s.epaisseur(0.9);
+s.ligne(0, 4.5, -2.35, 7.62);    # bloc haut-gauche → tangente poulie
+s.ligne(-3.65, 7.62, -3.65, 6.6);  # poulie → contrepoids haut
+
+# Force de levage m-g sur le bloc superieur (vers le haut)
+s.vert;
+s.tailleVecteur(0.3);
+s.force(1.6, 2.2, 1.6, 3.5);
+s.droite;
+s.texte(1.3, 2.9, "m-g");
+s.centre;
+s.tailleVecteur(0);
+
+# ─────────────────────────────────────────────
+# SYSTEME DE TRACTION (cote droit)
+# ─────────────────────────────────────────────
+
+# Support poulie droite (tirets)
+s.gris1;
+s.epaisseur(0.7);
+s.pointilles;
+s.ligne(11.5, 4.0, 11.5, 3.0);
+s.continu;
+
+# Poulie droite
+s.noir;
+s.epaisseur(1.0);
+s.cercle(11.5, 2.4, 0.55);
+s.disque(11.5, 2.4, 0.12);
+s.gris1;
+s.texte(11.5, 1.7, "poulie");
+
+# Capteur de force (petit rectangle)
+s.gris0;
+s.epaisseur(1.5);
+s.rect(8.9, 3.0, 10.1, 3.9);
+s.noir;
+s.texte(9.5, 3.45, "F");
+s.gris1;
+s.texte(9.5, 4.2, "capteur");
+
+# Fils de traction
+s.noir;
+s.epaisseur(0.9);
+s.ligne(8, 3.45, 8.9, 3.45);         # bloc → capteur
+s.ligne(10.1, 3.45, 11.5, 3.45);     # capteur → poulie (horizontal)
+s.ligne(11.5, 1.85, 11.5, 0.8);      # poulie → sable (vertical)
+
+# Recipient a sable
+s.gris0;
+s.epaisseur(1.0);
+s.boite(10.2, -0.5, 12.8, 0.8);
+s.gris1;
+s.texte(11.5, 0.15, "sable");
+
+# Force T (traction, vers la droite) sur le bloc superieur
+s.bleu;
+s.tailleVecteur(0.4);
+s.force(5.5, 3.45, 8, 3.45);
+s.droite;
+s.texte(5.2, 3.1, "T");
+s.centre;
+s.tailleVecteur(0);
+
+# ── Formule de bilan en bas (rendu LaTeX)
+s.noir;
+s.serif;
+s.fontSize(14);
+s.equation(4, -1.3, "N = (m^{\star} + m^{+} - m^{-}) \cdot g + \frac{1}{\lambda}");
+
+s.save("demo_dispositif.svg");
+print "-> demo_dispositif.svg";

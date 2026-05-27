@@ -1,0 +1,56 @@
+# exo3.flm — DS MS2 2026, exercice 3
+# Profilés UPE 200 : profil de référence + Section 1 + Section 2
+
+let s = Schema();
+
+# ── Profil UPE 200 de référence ───────────────────────────────────────────────
+# \upe{-1}{-0.3}{0}{1}  →  flemme angle = -pi/2 ≈ -1.5708
+s.upe(-1, -0.3, -1.5708, 1);
+
+s.repereZY(0, 0, 0.9);
+s.simplecroix(0, 0, 0.06);
+s.texte(0.15, 0.08, "G");
+
+# cotes (labels en mm, échelle : 1 unité ≈ 80-100 mm)
+s.coteV(1.1, -0.3, 2.5, 0.7, "80");
+s.coteV(1.1, -0.3, 2.0, 0.0, "25.6");
+s.coteV(1.1, 0.0, 2.0, 0.7, "54.4");
+s.coteH(-1, -0.4, 1, -1.3, "200");
+s.coteH(-1, -0.4, 0, -0.8, "100");
+s.coteH(0, -0.4, 1, -0.8, "100");
+s.texte(3.2, 0, "(cotes en mm)");
+
+s.save("exo3_upe_ref.svg");
+print "-> exo3_upe_ref.svg";
+
+# ── Section 1 : deux UPE dos-à-dos (symétrie axe Z) ───────────────────────────
+# \upefill{-1}{-1}{0}{1}  →  angle = -pi/2
+# \upe{1}{1}{180}{1}       →  angle = +pi/2 ≈ 1.5708
+s.clear();
+
+s.upe(-1, -1, -1.5708, 1);
+s.upe(1, 1, 1.5708, 1);
+
+s.repereZY(0, 0, 1.5);
+s.simplecroix(0, 0, 0.1);
+s.texte(0.18, 0.12, "G");
+s.texte(0, -1.8, "Section 1");
+
+s.save("exo3_section1.svg");
+print "-> exo3_section1.svg";
+
+# ── Section 2 : deux UPE flancs en regard (symétrie axe Y) ────────────────────
+# \upefill{-1}{1}{-90}{1}  →  tikz_rot=-90°  →  angle = -pi/2 - pi/2 = -pi ≈ -3.14159
+# \upe{1}{-1}{90}{1}       →  tikz_rot=+90°  →  angle = pi/2 - pi/2 = 0
+s.clear();
+
+s.upe(-1, 1, -3.14159, 1);
+s.upe(1, -1, 0, 1);
+
+s.repereZY(0, 0, 1.5);
+s.simplecroix(0, 0, 0.1);
+s.texte(0.18, 0.12, "G");
+s.texte(0, -1.8, "Section 2");
+
+s.save("exo3_section2.svg");
+print "-> exo3_section2.svg";

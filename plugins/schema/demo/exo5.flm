@@ -1,0 +1,43 @@
+# exo5.flm — DS MS2 2026, exercice 5
+# Poutre AB bi-appuyée en bois, charge répartie q, section rectangulaire b×h
+
+let s = Schema();
+
+# ── Schéma de la poutre ──────────────────────────────────────────────────────
+s.poutre(0, 0, 8, 0, 0.18);
+s.articulation(0, 0, -1.5708, 0.4);
+s.appui(8, 0, -1.5708, 0.4);
+
+s.rouge;
+s.chargeRep(0, 0, 8, 1.2);
+s.texte(4, 1.4, "q = 14 kN/m");
+
+s.noir;
+s.coteH(0, -0.55, 8, -0.9, "L = 5.000 m");
+
+s.texte(-0.15, 0.12, "A");
+s.texte(8.15, 0.12, "B");
+
+s.save("exo5.svg");
+print "-> exo5.svg";
+
+# ── Section rectangulaire b×h (b = h/2) ──────────────────────────────────────
+s.clear();
+
+# rectangle centré en G
+s.ligne(-0.5, -1, 0.5, -1);
+s.ligne(0.5, -1, 0.5, 1);
+s.ligne(0.5, 1, -0.5, 1);
+s.ligne(-0.5, 1, -0.5, -1);
+
+s.repereZY(0, 0, 1.0);
+s.simplecroix(0, 0, 0.08);
+s.texte(0.15, 0.08, "G");
+
+s.coteH(-0.5, -1.1, 0.5, -1.7, "b = h/2");
+s.coteV(0.55, -1, 1.2, 0, "h/2");
+s.coteV(0.55, 0, 1.2, 1, "h/2");
+s.coteV(0.55, -1, 1.6, 1, "h = 400 mm");
+
+s.save("exo5_section.svg");
+print "-> exo5_section.svg";

@@ -1,0 +1,110 @@
+# algorithmes.flm — tri, recherche, PGCD, nombres premiers, puissance rapide
+
+# --- tri à bulles ---
+fn tri_bulles(arr) {
+  let n = len(arr);
+  for (let i = 0; i < n-1; i++) {
+    for (let j = 0; j < n-i-1; j++) {
+      if (arr[j] > arr[j+1]) {
+        let tmp = arr[j];
+        arr[j] = arr[j+1];
+        arr[j+1] = tmp;
+      }
+    }
+  }
+}
+
+let t = [5, 2, 8, 1, 9, 3];
+tri_bulles(t);
+assert(t[0] == 1, "tri[0]");
+assert(t[1] == 2, "tri[1]");
+assert(t[5] == 9, "tri[5]");
+
+# tableau déjà trié
+let u = [1, 2, 3, 4, 5];
+tri_bulles(u);
+assert(u[0] == 1 && u[4] == 5, "deja trie");
+
+# tableau d'un élément
+let seul = [42];
+tri_bulles(seul);
+assert(seul[0] == 42, "un element");
+
+# --- recherche dichotomique ---
+fn dichotomie(arr, cible) {
+  let g = 0;
+  let d = len(arr) - 1;
+  while (g <= d) {
+    let m = (g + d) // 2;
+    if (arr[m] == cible) { return m; }
+    if (arr[m] < cible)  { g = m + 1; }
+    else                 { d = m - 1; }
+  }
+  return -1;
+}
+
+let s = [1, 3, 5, 7, 9, 11, 13];
+assert(dichotomie(s, 7) == 3, "dicho trouve");
+assert(dichotomie(s, 1) == 0, "dicho debut");
+assert(dichotomie(s, 13) == 6, "dicho fin");
+assert(dichotomie(s, 4) == -1, "dicho absent");
+
+# --- PGCD (algorithme d'Euclide) ---
+fn pgcd(a, b) {
+  while (b != 0) {
+    let r = a % b;
+    a = b;
+    b = r;
+  }
+  return a;
+}
+
+assert(pgcd(12, 8) == 4, "pgcd(12,8)");
+assert(pgcd(100, 75) == 25, "pgcd(100,75)");
+assert(pgcd(7, 13) == 1, "pgcd coprimes");
+assert(pgcd(36, 24) == 12, "pgcd(36,24)");
+
+# --- crible d'Eratosthène (premiers <= 30) ---
+fn crible(max) {
+  let est_premier = [];
+  for (let i in range(max+1)) { push(est_premier, true); }
+  est_premier[0] = false;
+  est_premier[1] = false;
+  for (let i = 2; i*i <= max; i++) {
+    if (est_premier[i]) {
+      let j = i * i;
+      while (j <= max) {
+        est_premier[j] = false;
+        j += i;
+      }
+    }
+  }
+  let res = [];
+  for (let i = 2; i <= max; i++) {
+    if (est_premier[i]) { push(res, i); }
+  }
+  return res;
+}
+
+let premiers = crible(30);
+assert(len(premiers) == 10, "nb premiers <= 30");
+assert(premiers[0] == 2, "premier[0]=2");
+assert(premiers[9] == 29, "premier[9]=29");
+
+# --- puissance entière rapide ---
+fn puissance(base, exp) {
+  let res = 1;
+  while (exp > 0) {
+    if (exp % 2 == 1) { res *= base; }
+    base *= base;
+    exp = exp // 2;
+  }
+  return res;
+}
+
+assert(puissance(2, 0) == 1, "2^0");
+assert(puissance(2, 10) == 1024, "2^10");
+assert(puissance(3, 5) == 243, "3^5");
+assert(puissance(10, 6) == 1000000, "10^6");
+
+print "algorithmes : OK";

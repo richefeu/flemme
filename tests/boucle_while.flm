@@ -1,0 +1,49 @@
+# boucle_while.flm — while, break, continue
+
+# comptage simple
+let i = 0;
+let s = 0;
+while (i < 5) {
+  s += i;
+  i++;
+}
+assert(i == 5, "while compteur final");
+assert(s == 10, "while somme 0..4");
+
+# break
+let n = 0;
+while (true) {
+  n++;
+  if (n == 3) { break; }
+}
+assert(n == 3, "break sort a 3");
+
+# continue (accumule uniquement les pairs)
+let pair = 0;
+let k = 0;
+while (k < 10) {
+  k++;
+  if (k % 2 != 0) { continue; }
+  pair += k;
+}
+assert(pair == 30, "continue pairs 2+4+6+8+10");
+
+# boucle qui ne s'exécute pas
+let z = 0;
+while (false) { z++; }
+assert(z == 0, "while false corps ignore");
+
+# boucle imbriquée
+let prod = 0;
+let a = 1;
+while (a <= 3) {
+  let b = 1;
+  while (b <= 3) {
+    prod++;
+    b++;
+  }
+  a++;
+}
+assert(prod == 9, "while imbrique 3x3");
+
+print "boucle_while : OK";

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+	<key>name</key>
+	<string>Flemme</string>
+
+	<key>scopeName</key>
+	<string>source.flemme</string>
+
+	<key>fileTypes</key>
+	<array>
+		<string>flm</string>
+	</array>
+
+	<key>uuid</key>
+	<string>4616C008-0631-415B-A1C5-4E39E28BD2D6</string>
+
+	<key>patterns</key>
+	<array>
+
+		<!-- ════════════════════════════════════════
+		     COMMENTAIRES  #  jusqu'à fin de ligne
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>comment.line.number-sign.flemme</string>
+			<key>match</key>
+			<string>#.*$</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     CHAÎNES  "..."  avec interpolation {var}
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>string.quoted.double.flemme</string>
+			<key>begin</key>
+			<string>"</string>
+			<key>end</key>
+			<string>"</string>
+			<key>patterns</key>
+			<array>
+
+				<!-- guillemet échappé \" -->
+				<dict>
+					<key>name</key>
+					<string>constant.character.escape.flemme</string>
+					<key>match</key>
+					<string>\\"</string>
+				</dict>
+
+				<!-- placeholder {variable} ou {variable:.2f} ou {obj.membre} -->
+				<dict>
+					<key>name</key>
+					<string>variable.other.interpolated.flemme</string>
+					<key>match</key>
+					<string>\{[A-Za-z_][A-Za-z0-9_.]*(?::[^}]*)?\}</string>
+				</dict>
+
+			</array>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     DÉCLARATION DE FONCTION  fn nomFonction
+		     (avant le pattern mot-clé générique)
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>match</key>
+			<string>\b(fn)\s+([A-Za-z_][A-Za-z0-9_]*)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.flemme</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.flemme</string>
+				</dict>
+			</dict>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     DÉCLARATION DE VARIABLE  let nomVariable
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>match</key>
+			<string>\b(let)\s+([A-Za-z_][A-Za-z0-9_]*)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.flemme</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.declaration.flemme</string>
+				</dict>
+			</dict>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     MOTS-CLÉS DE CONTRÔLE DE FLUX
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>keyword.control.flemme</string>
+			<key>match</key>
+			<string>\b(if|else|while|for|in|break|continue|return)\b</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     AUTRES MOTS-CLÉS  (print)
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>keyword.other.flemme</string>
+			<key>match</key>
+			<string>\bprint\b</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     CONSTANTES BOOLÉENNES  true  false
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>constant.language.flemme</string>
+			<key>match</key>
+			<string>\b(true|false)\b</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     FONCTIONS MATHÉMATIQUES NATIVES
+		     (seulement si suivies de '(')
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>support.function.math.flemme</string>
+			<key>match</key>
+			<string>\b(sin|cos|tan|sqrt|exp|ln|log10|abs|floor|ceil|round)\b(?=\s*\()</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     FONCTIONS NATIVES GÉNÉRALES
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>support.function.builtin.flemme</string>
+			<key>match</key>
+			<string>\b(len|range|push|pop|input|num|str|type|print_raw|assert|upper|lower|trim|split|find|replace)\b(?=\s*\()</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     NOMBRES  (décimaux avant entiers)
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>constant.numeric.float.flemme</string>
+			<key>match</key>
+			<string>\b[0-9]+\.[0-9]+\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>constant.numeric.integer.flemme</string>
+			<key>match</key>
+			<string>\b[0-9]+\b</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     OPÉRATEURS
+		     Ordre : les plus longs en premier pour
+		     éviter qu'un préfixe soit consommé avant.
+		       ++  decr  ==  !=  <=  >=  and  or
+		       +=  -=  *=  intdiv  /=
+		       +  -  *  /  %  ^  lt  gt  !  =
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>keyword.operator.flemme</string>
+			<key>match</key>
+			<string>\+\+|--|==|!=|&lt;=|&gt;=|&amp;&amp;|\|\||[+\-]=|\*=|\/\/|\/=|[+\-\*\/%\^]|[&lt;&gt;]|!</string>
+		</dict>
+
+		<!-- ════════════════════════════════════════
+		     OPÉRATEUR D'AFFECTATION  =
+		     (séparé pour lui donner un scope distinct)
+		     ════════════════════════════════════════ -->
+		<dict>
+			<key>name</key>
+			<string>keyword.operator.assignment.flemme</string>
+			<key>match</key>
+			<string>(?&lt;![=!&lt;&gt;+\-*\/])=(?!=)</string>
+		</dict>
+
+	</array>
+
+</dict>
+</plist>

@@ -1,0 +1,57 @@
+# maths.flm — fonctions mathématiques de la bibliothèque standard
+
+fn approx(a, b) {
+  let d = a - b;
+  if (d < 0) { d = -d; }
+  return d < 0.000001;
+}
+
+# abs
+assert(abs(-7) == 7, "abs negatif");
+assert(abs(7) == 7, "abs positif");
+assert(abs(0) == 0, "abs zero");
+
+# floor / ceil / round
+assert(floor(3.7) == 3, "floor positif");
+assert(floor(-3.2) == -4, "floor negatif");
+assert(ceil(3.2) == 4, "ceil positif");
+assert(ceil(-3.7) == -3, "ceil negatif");
+assert(round(3.5) == 4, "round demi haut");
+assert(round(3.4) == 3, "round demi bas");
+assert(round(-3.5) == -4, "round negatif");
+
+# sqrt
+assert(sqrt(4) == 2, "sqrt 4");
+assert(sqrt(9) == 3, "sqrt 9");
+assert(sqrt(0) == 0, "sqrt 0");
+assert(approx(sqrt(2) * sqrt(2), 2), "sqrt(2)^2");
+
+# trigonométrie
+assert(approx(sin(0), 0), "sin(0)");
+assert(approx(cos(0), 1), "cos(0)");
+assert(approx(tan(0), 0), "tan(0)");
+
+let pi = 3.14159265358979;
+assert(approx(sin(pi), 0), "sin(pi)");
+assert(approx(cos(pi), -1), "cos(pi)");
+
+let demi_pi = pi / 2;
+assert(approx(sin(demi_pi), 1), "sin(pi/2)");
+assert(approx(cos(demi_pi), 0), "cos(pi/2)");
+
+# logarithme naturel (ln) et exponentielle
+assert(approx(ln(1), 0), "ln(1)");
+assert(approx(exp(0), 1), "exp(0)");
+assert(approx(exp(ln(5)), 5), "exp(ln(5))");
+assert(approx(ln(exp(3)), 3), "ln(exp(3))");
+
+# log10
+assert(approx(log10(1), 0), "log10(1)");
+assert(approx(log10(100), 2), "log10(100)");
+assert(approx(log10(1000), 3), "log10(1000)");
+
+# puissance et cohérence
+assert(approx(2 ^ 0.5, sqrt(2)), "2^0.5 == sqrt(2)");
+assert(approx(exp(ln(7)), 7), "identite exp/ln");
+
+print "maths : OK";

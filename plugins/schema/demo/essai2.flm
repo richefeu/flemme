@@ -1,0 +1,17 @@
+let s = Schema();
+
+s.setColor(0.5, 0.5, 0.5); # rgb donné entre 0 et 1
+
+s.setHatches(45.0, 0.6, 0.1); # inclinaison, séparation, épaisseur des lignes
+s.beginContour();
+s.addContourPoint(0,0);
+s.addContourPoint(1,0);
+s.addContourPoint(1,1);
+s.addContourPoint(0,1);
+s.endContour(); # fermeture de la forme
+
+
+
+
+s.save("new2.svg");
+

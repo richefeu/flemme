@@ -1,0 +1,57 @@
+# conditions.flm — if / else if / else, opérateurs logiques
+
+# branche if simple
+let x = 5;
+if (x > 3) {
+  assert(true, "if vrai");
+} else {
+  assert(false, "if faux pris");
+}
+
+# branche else
+if (x > 10) {
+  assert(false, "else pris a tort");
+} else {
+  assert(true, "else ok");
+}
+
+# else if
+let note = 14;
+let mention = "";
+if (note >= 16) {
+  mention = "TB";
+} else if (note >= 14) {
+  mention = "B";
+} else if (note >= 12) {
+  mention = "AB";
+} else {
+  mention = "P";
+}
+assert(mention == "B", "else if chaine");
+
+# opérateurs logiques
+assert(true && true, "&& vrai vrai");
+assert(!(false && true), "&& faux");
+assert(true || false, "|| vrai faux");
+assert(!(false || false), "|| faux faux");
+assert(!false, "! faux");
+assert(!(!true), "double negation");
+
+# court-circuit &&
+let appele = false;
+fn marque() { appele = true; return true; }
+false && marque();
+assert(!appele, "court-circuit &&");
+
+# court-circuit ||
+appele = false;
+true || marque();
+assert(!appele, "court-circuit ||");
+
+# comparaisons chaînes
+assert("abc" == "abc", "chaine ==");
+assert("abc" != "xyz", "chaine !=");
+assert("abc" < "abd", "chaine <");
+assert("z" > "a", "chaine >");
+
+print "conditions : OK";

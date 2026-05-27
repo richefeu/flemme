@@ -1,0 +1,67 @@
+# fonctions.flm — déclaration, appel, récursivité, closures, retour anticipé
+
+# fonction simple
+fn carre(x) { return x * x; }
+assert(carre(5) == 25, "carre(5)");
+assert(carre(0) == 0, "carre(0)");
+
+# plusieurs paramètres
+fn max2(a, b) {
+  if (a >= b) { return a; }
+  return b;
+}
+assert(max2(3, 7) == 7, "max2");
+assert(max2(9, 2) == 9, "max2 inverse");
+
+# récursivité — factorielle
+fn fact(n) {
+  if (n <= 1) { return 1; }
+  return n * fact(n - 1);
+}
+assert(fact(0) == 1, "fact(0)");
+assert(fact(1) == 1, "fact(1)");
+assert(fact(5) == 120, "fact(5)");
+assert(fact(7) == 5040, "fact(7)");
+
+# récursivité — Fibonacci
+fn fib(n) {
+  if (n <= 1) { return n; }
+  return fib(n-1) + fib(n-2);
+}
+assert(fib(0) == 0, "fib(0)");
+assert(fib(1) == 1, "fib(1)");
+assert(fib(6) == 8, "fib(6)");
+assert(fib(10) == 55, "fib(10)");
+
+# fonction sans return explicite (retourne vide)
+let side = 0;
+fn effetBord() { side = 99; }
+effetBord();
+assert(side == 99, "effet de bord");
+
+# closure — variable capturée depuis la portée englobante
+let compteur = 0;
+fn inc() { compteur++; return compteur; }
+assert(inc() == 1, "closure 1");
+assert(inc() == 2, "closure 2");
+assert(inc() == 3, "closure 3");
+assert(compteur == 3, "closure variable englobante");
+
+# fonctions mutuellement récursives
+fn estPair(n) {
+  if (n == 0) { return true; }
+  return estImpair(n - 1);
+}
+fn estImpair(n) {
+  if (n == 0) { return false; }
+  return estPair(n - 1);
+}
+assert(estPair(4) == true, "estPair(4)");
+assert(estImpair(3) == true, "estImpair(3)");
+assert(estPair(7) == false, "estPair(7)");
+
+# imbrication d'appels
+fn cube(x) { return x * carre(x); }
+assert(cube(3) == 27, "cube via carre");
+
+print "fonctions : OK";

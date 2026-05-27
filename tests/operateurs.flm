@@ -1,0 +1,52 @@
+# operateurs.flm — arithmétique, comparaisons, priorité, division entière, modulo, puissance
+
+# addition / soustraction
+assert(2 + 3 == 5, "2+3");
+assert(10 - 4 == 6, "10-4");
+assert(-3 + 1 == -2, "négatif");
+
+# multiplication / division
+assert(3 * 4 == 12, "3*4");
+assert(10 / 4 == 2.5, "10/4");
+assert(9 / 3 == 3, "9/3");
+
+# division entière
+assert(10 // 3 == 3, "10//3");
+assert(7 // 2 == 3, "7//2");
+assert(-7 // 2 == -4, "-7//2");
+
+# modulo
+assert(10 % 3 == 1, "10%3");
+assert(8 % 4 == 0, "8%4");
+assert(7 % 2 == 1, "7%2");
+
+# puissance
+assert(2 ^ 10 == 1024, "2^10");
+assert(3 ^ 3 == 27, "3^3");
+assert(4 ^ 0.5 == 2, "4^0.5");
+
+# priorité des opérateurs
+assert(2 + 3 * 4 == 14, "priorite * sur +");
+assert((2 + 3) * 4 == 20, "parentheses");
+assert(2 ^ 3 + 1 == 9, "priorite ^ sur +");
+assert(10 - 2 * 3 == 4, "priorite * sur -");
+assert(12 / 4 + 1 == 4, "priorite / sur +");
+
+# comparaisons numériques
+assert(3 < 5, "< vrai");
+assert(!(5 < 3), "< faux");
+assert(5 <= 5, "<= egal");
+assert(5 >= 5, ">= egal");
+assert(6 > 5, "> vrai");
+assert(3 != 4, "!= vrai");
+assert(!(3 != 3), "!= faux");
+
+# unaire
+assert(-(-5) == 5, "double neg");
+assert(-(3 + 2) == -5, "neg expression");
+
+# concaténation de chaînes avec +
+let s = "ab" + "cd";
+assert(s == "abcd", "concat +");
+
+print "operateurs : OK";

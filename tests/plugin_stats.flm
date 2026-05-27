@@ -1,0 +1,62 @@
+# plugin_stats.flm — Stats : add, mean, variance, stddev, min, max, count, clear
+
+fn approx(a, b) {
+  let d = a - b;
+  if (d < 0) { d = -d; }
+  return d < 0.000001;
+}
+
+let s = Stats();
+
+# état initial
+assert(s.count == 0, "count initial");
+
+# ajout de valeurs
+s.add(2);
+s.add(4);
+s.add(4);
+s.add(4);
+s.add(5);
+s.add(5);
+s.add(7);
+s.add(9);
+
+assert(s.count == 8, "count apres 8 add");
+
+# min / max
+assert(s.min() == 2, "min");
+assert(s.max() == 9, "max");
+
+# moyenne : (2+4+4+4+5+5+7+9)/8 = 40/8 = 5
+assert(approx(s.mean(), 5), "mean");
+
+# variance population : E[(x-mu)^2]
+# valeurs: 2,4,4,4,5,5,7,9  mu=5
+# deviations: -3,-1,-1,-1,0,0,2,4
+# carrés: 9,1,1,1,0,0,4,16  somme=32  var=32/8=4
+assert(approx(s.variance(), 4), "variance");
+
+# écart-type = sqrt(4) = 2
+assert(approx(s.stddev(), 2), "stddev");
+
+# clear remet tout à zéro
+s.clear();
+assert(s.count == 0, "count apres clear");
+
+# ajout d'une seule valeur
+s.add(7);
+assert(s.count == 1, "count apres 1 add");
+assert(approx(s.mean(), 7), "mean 1 valeur");
+assert(approx(s.variance(), 0), "variance 1 valeur");
+assert(approx(s.stddev(), 0), "stddev 1 valeur");
+assert(s.min() == 7, "min 1 valeur");
+assert(s.max() == 7, "max 1 valeur");
+
+# accumuler depuis un tableau
+let s2 = Stats();
+let data = [1, 2, 3, 4, 5];
+for (let v in data) { s2.add(v); }
+assert(s2.count == 5, "count tableau");
+assert(approx(s2.mean(), 3), "mean 1..5");
+
+print "plugin_stats : OK";

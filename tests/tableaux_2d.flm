@@ -1,0 +1,53 @@
+# tableaux_2d.flm — tableaux de tableaux, accès mat[i][j]
+
+# matrice littérale 3x3
+let m = [[1, 2, 3],
+         [4, 5, 6],
+         [7, 8, 9]];
+
+assert(m[0][0] == 1, "m[0][0]");
+assert(m[1][1] == 5, "m[1][1]");
+assert(m[2][2] == 9, "m[2][2]");
+assert(m[0][2] == 3, "m[0][2]");
+assert(m[2][0] == 7, "m[2][0]");
+
+# modification
+m[1][1] = 99;
+assert(m[1][1] == 99, "modif m[1][1]");
+
+# dimensions
+assert(len(m) == 3, "nb lignes");
+assert(len(m[0]) == 3, "nb colonnes");
+
+# construction dynamique — matrice identité 4x4
+let n = 4;
+let id = [];
+for (let i in range(n)) {
+  let ligne = [];
+  for (let j in range(n)) {
+    if (i == j) { push(ligne, 1); }
+    else        { push(ligne, 0); }
+  }
+  push(id, ligne);
+}
+assert(id[0][0] == 1, "id[0][0]");
+assert(id[1][1] == 1, "id[1][1]");
+assert(id[0][1] == 0, "id[0][1]");
+assert(id[3][3] == 1, "id[3][3]");
+
+# trace de la matrice identité
+let trace = 0;
+for (let i in range(n)) { trace += id[i][i]; }
+assert(trace == 4, "trace identite 4x4");
+
+# somme de tous les éléments de la matrice 3x3
+let total = 0;
+for (let i in range(3)) {
+  for (let j in range(3)) {
+    total += m[i][j];
+  }
+}
+# m[1][1] a été remplacé par 99 (à la place de 5), donc somme = 45 - 5 + 99 = 139
+assert(total == 139, "somme totale apres modif");
+
+print "tableaux_2d : OK";

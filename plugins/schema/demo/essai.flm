@@ -1,0 +1,42 @@
+let s = Schema();
+
+s.gris;
+s.poutre(0, 0, 6, 0, 0.15);
+
+s.noir;
+s.appui(0, 0, -1.5708, 0.4);
+s.articulation(6, 0, -1.5708, 0.4);
+
+s.chargeRep(0, 0.2, 6, 1.2);
+
+s.coteH(0, -0.8, 6, -1.0, "L");
+
+s.save("old.svg");
+
+
+# nouvelle syntaxe souhaitée pour les rendus spécifiques à la RDM (théorie des poutres)
+#    
+#    let s = Schema();
+#    
+#    s.couleur(0.5, 0.5, 0.5); # rgb donné entre 0 et 1
+#    s.epaisseurBarre(0.15); 
+#    s.barre(0, 0, 6, 0);
+#    
+#    s.nomCouleur("black");
+#    s.tailleLiaison(0.4);
+#    s.orientation(0.0); 
+#    s.liaison_1_ddl(0, 0); # s.liaison_1ddl_continue(0, 0) pour que les rouleaux ne soient pas représentés
+#    s.orientation(0.0);
+#    s.liaison_2_ddl(6, 0);
+#    
+#    s.label("q");
+#    s.alignement(0.5); # au milieu (50%)
+#    s.decallage(0.1); # 
+#    s.teteVecteur("ouvert"); # s.setArrowType("plein"); 
+#    s.chargeRepartieUniforme(0, 0.2, 6, 1.2); # 
+#    
+#    s.label("L");
+#    s.coteHorizontale(0, -0.8, 6, -1.0);
+#    
+#    s.sauve("new.svg");
+#    

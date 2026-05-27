@@ -1,0 +1,52 @@
+# tableaux.flm — création, indexation, push/pop, len, parcours
+
+# tableau littéral
+let t = [10, 20, 30, 40, 50];
+assert(len(t) == 5, "len initial");
+assert(t[0] == 10, "t[0]");
+assert(t[4] == 50, "t[4]");
+
+# modification
+t[2] = 99;
+assert(t[2] == 99, "affectation indexee");
+
+# push / pop
+let a = [1, 2, 3];
+push(a, 4);
+assert(len(a) == 4, "push longueur");
+assert(a[3] == 4, "push valeur");
+
+let v = pop(a);
+assert(v == 4, "pop valeur");
+assert(len(a) == 3, "pop longueur");
+
+# tableau vide
+let vide = [];
+assert(len(vide) == 0, "tableau vide len");
+push(vide, 42);
+assert(len(vide) == 1, "push sur vide");
+
+# construction via boucle
+let carr = [];
+for (let i in range(5)) {
+  push(carr, (i+1)*(i+1));
+}
+assert(len(carr) == 5, "construction boucle");
+assert(carr[0] == 1, "carr[0]");
+assert(carr[4] == 25, "carr[4]");
+
+# somme via boucle for in
+let s = 0;
+for (let x in t) { s += x; }
+assert(s == 10+20+99+40+50, "somme for in");
+
+# tableau de chaînes
+let mots = ["alpha", "beta", "gamma"];
+assert(mots[1] == "beta", "tableau chaines");
+mots[0] = "zeta";
+assert(mots[0] == "zeta", "modif chaine tableau");
+
+# rang négatif n'est pas supporté, on teste les bornes positives
+assert(t[len(t)-1] == 50, "dernier element via len");
+
+print "tableaux : OK";

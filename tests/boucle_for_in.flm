@@ -1,0 +1,49 @@
+# boucle_for_in.flm — for ... in (range et tableaux)
+
+# range(n) — indices 0..n-1
+let s = 0;
+for (let i in range(5)) {
+  s += i;
+}
+assert(s == 10, "for in range somme 0..4");
+
+# parcours de tableau
+let t = [10, 20, 30, 40];
+let acc = 0;
+for (let v in t) {
+  acc += v;
+}
+assert(acc == 100, "for in tableau somme");
+
+# construction tableau via range
+let carr = [];
+for (let i in range(5)) {
+  push(carr, (i+1)*(i+1));
+}
+assert(len(carr) == 5, "for in push longueur");
+assert(carr[0] == 1, "carr[0]");
+assert(carr[4] == 25, "carr[4]");
+
+# break dans for in
+let cnt = 0;
+for (let i in range(10)) {
+  if (i == 4) { break; }
+  cnt++;
+}
+assert(cnt == 4, "for in break");
+
+# continue dans for in (somme pairs)
+let pair = 0;
+for (let i in range(10)) {
+  if (i % 2 != 0) { continue; }
+  pair += i;
+}
+assert(pair == 20, "for in continue pairs 0+2+4+6+8");
+
+# for in sur chaine de caractères — parcours des éléments d'un tableau de chaines
+let mots = ["un", "deux", "trois"];
+let nb = 0;
+for (let m in mots) { nb++; }
+assert(nb == 3, "for in tableau chaines");
+
+print "boucle_for_in : OK";

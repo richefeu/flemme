@@ -1,0 +1,55 @@
+# plugin_mockrockable.flm — MockRockable via constructeur Rockable()
+
+let r = Rockable();
+
+# valeurs par défaut
+assert(r.t == 0, "t initial");
+assert(r.dt == 0.000001, "dt initial");
+assert(r.tmax == 1.0, "tmax initial");
+
+# setters
+r.t = 0;
+r.tmax = 1.0;
+r.dt = 0.25;
+assert(r.t == 0, "t apres set");
+assert(r.tmax == 1.0, "tmax apres set");
+assert(r.dt == 0.25, "dt apres set");
+
+# setIntegrator (ne plante pas)
+r.setIntegrator("velocityVerlet");
+
+# velocityVerletStep avance t de dt
+r.velocityVerletStep();
+assert(r.t == 0.25, "t apres 1 step");
+
+r.velocityVerletStep();
+assert(r.t == 0.5, "t apres 2 steps");
+
+r.velocityVerletStep();
+assert(r.t == 0.75, "t apres 3 steps");
+
+r.velocityVerletStep();
+assert(r.t == 1.0, "t apres 4 steps");
+
+# getKineticEnergy retourne une valeur > 0
+let ek = r.getKineticEnergy();
+assert(type(ek) == "nombre", "getKineticEnergy type");
+assert(ek > 0, "getKineticEnergy > 0");
+
+# getCriticalTimeStep retourne une valeur > 0
+let dtc = r.getCriticalTimeStep();
+assert(type(dtc) == "nombre", "getCriticalTimeStep type");
+assert(dtc > 0, "getCriticalTimeStep > 0");
+
+# une intégration complète avec reset du temps
+r.t = 0;
+r.tmax = 1.0;
+r.dt = 0.25;
+let steps = 0;
+while (r.t < r.tmax) {
+  r.velocityVerletStep();
+  steps++;
+}
+assert(steps == 4, "nb steps integration");
+
+print "plugin_mockrockable : OK";

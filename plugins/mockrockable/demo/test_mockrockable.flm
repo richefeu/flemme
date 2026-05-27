@@ -1,0 +1,31 @@
+# test_mockrockable.flm - test du plugin MockRockable
+let sim = Rockable();
+
+# Configuration
+sim.setVerboseLevel(1);
+sim.setIntegrator("velocityVerlet");
+sim.setOpenMPThreads(4);
+sim.initialChecks();
+
+# Parametres de simulation
+sim.dt   = 0.0001;
+sim.tmax = 0.0005;
+
+print "=== Parametres ===";
+print "dt   = {sim.dt}";
+print "tmax = {sim.tmax}";
+
+# Boucle de simulation manuelle
+let step = 0;
+while (sim.t < sim.tmax) {
+    sim.velocityVerletStep();
+    step = step + 1;
+}
+
+print "";
+print "=== Resultats apres {step} pas ===";
+print "t final     = {sim.t:.6f}";
+print "Ec trans    = {sim.getKineticEnergy():.2f}";
+print "Ec rot      = {sim.getErot():.2f}";
+print "dt critique = {sim.getCriticalTimeStep():.2e}";
+print "Fmax        = {sim.getResultantQuickStats():.1f}";

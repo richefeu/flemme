@@ -1,0 +1,23 @@
+# test_timer.flm - test du plugin Timer
+let t = Timer();
+
+# Travail simule : somme de N carres
+let N = 500000;
+let s = 0;
+for (let i in range(N)) {
+    s = s + i * i;
+}
+
+let ms = t.elapsed() * 1000;
+print "Somme des carres de 0 a {N-1} = {s}";
+print "Temps ecoule : {ms:.2f} ms";
+
+# Reinitialisation
+t.reset();
+let s2 = 0;
+for (let i in range(N)) {
+    s2 = s2 + i;
+}
+let ms2 = t.elapsed() * 1000;
+print "Somme de 0 a {N-1} = {s2}";
+print "Temps apres reset : {ms2:.2f} ms";

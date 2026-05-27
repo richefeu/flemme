@@ -1,0 +1,56 @@
+# exo1.flm — DS MS2 2026, exercice 1
+# Section en T élargie avec 4 trous circulaires — barycentre Y_G
+# YG = 1 substitué : toutes les coordonnées sont en mètres
+
+let s = Schema();
+
+# ── Contour de la section ─────────────────────────────────────────────────────
+# Polygone dans l'ordre : bas → droite → dessus → gauche → fermeture
+s.ligne(-4.44, -1, 4.44, -1);
+s.ligne(4.44, -1, 4.44, -0.4);
+s.ligne(4.44, -0.4, 5.44, -0.4);
+s.ligne(5.44, -0.4, 5.44, 0.8);
+s.ligne(5.44, 0.8, 4.84, 0.8);
+s.ligne(4.84, 0.8, 4.84, 0.4);
+s.ligne(4.84, 0.4, -4.84, 0.4);
+s.ligne(-4.84, 0.4, -4.84, 0.8);
+s.ligne(-4.84, 0.8, -5.44, 0.8);
+s.ligne(-5.44, 0.8, -5.44, -0.4);
+s.ligne(-5.44, -0.4, -4.44, -0.4);
+s.ligne(-4.44, -0.4, -4.44, -1);
+
+# ── 4 trous circulaires (r = 0.4 m, y = -0.3 m) ─────────────────────────────
+s.cercle(-3, -0.3, 0.4);
+s.cercle(-1.5, -0.3, 0.4);
+s.cercle(1.5, -0.3, 0.4);
+s.cercle(3, -0.3, 0.4);
+
+# ── Repère ZY et marqueur G ───────────────────────────────────────────────────
+s.repereZY(0, 0, 3.5);
+s.simplecroix(0, 0, 0.12);
+s.texte(0.2, 0.15, "G");
+
+# ── Cote halfcoteV : Y_G depuis le bas (y=-1) vers G (y=0) ────────────────────
+s.demicoteV(4.5, -1, 6.5, 0, "YG");
+
+# ── Cotes verticales principales ──────────────────────────────────────────────
+s.coteV(-5.5, -1, -5.7, -0.4, "0.300");
+s.coteV(-5.5, -1, -6.2, 0.8, "0.900");
+
+# ── Cotes horizontales principales ────────────────────────────────────────────
+s.coteH(-4.44, -1.1, 4.44, -2.0, "4.440");
+s.coteH(-5.44, -1.1, 5.44, -2.5, "5.440");
+s.coteH(-5.44, -1.1, -4.44, -1.7, "0.500");
+s.coteH(4.44, -1.1, 5.44, -1.7, "0.500");
+
+# ── Entraxes et diamètre des trous ─────────────────────────────────────────────
+s.coteH(-3, -0.3, -1.5, -1.4, "0.750");
+s.coteH(-1.5, -0.3, 0, -1.4, "0.750");
+s.coteH(0, -0.3, 1.5, -1.4, "0.750");
+s.coteH(1.5, -0.3, 3, -1.4, "0.750");
+s.texte(1, 0.3, "4 trous  0.400");
+
+s.texte(4.5, -2.8, "(cotes en metres)");
+
+s.save("exo1.svg");
+print "-> exo1.svg";

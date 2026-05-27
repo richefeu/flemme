@@ -1,0 +1,22 @@
+# plugin_timer.flm — Timer : elapsed(), reset()
+
+let t = Timer();
+
+# elapsed() doit retourner un nombre >= 0
+let e1 = t.elapsed();
+assert(type(e1) == "nombre", "elapsed type");
+assert(e1 >= 0, "elapsed >= 0");
+
+# une petite boucle s'écoule en temps positif
+let s = 0;
+for (let i in range(1000)) { s += i; }
+let e2 = t.elapsed();
+assert(e2 >= 0, "elapsed apres boucle >= 0");
+
+# reset() remet le compteur à zéro (elapsed redevient très petit)
+t.reset();
+let e3 = t.elapsed();
+assert(e3 >= 0, "elapsed apres reset >= 0");
+assert(e3 < e2 + 1, "elapsed apres reset raisonnable");
+
+print "plugin_timer : OK";

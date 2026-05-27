@@ -1,0 +1,113 @@
+# test_plotsvg.flm — démo de toutes les fonctionnalités PlotSVG
+
+let plt = PlotSVG();
+
+# ── Graphe 1 : sinus + cosinus ────────────────────────────────────────────────
+# setFill, setLineStyle, hline, axe zéro automatique
+let x = [];
+let ys = [];
+let yc = [];
+let i = 0;
+while (i <= 100) {
+  let t = -3.14159265 + i * 6.28318530 / 100.0;
+  push(x, t);
+  push(ys, sin(t));
+  push(yc, cos(t));
+  i++;
+}
+
+plt.setTitle("Sinus et Cosinus");
+plt.setLabelX("x (radians)");
+plt.setLabelY("f(x)");
+
+plt.setFill("#1f77b4");
+plt.setLabel("sin(x)");
+plt.plot(x, ys);
+
+plt.setColor("#ff7f0e");
+plt.setLineStyle("dashed");
+plt.setLabel("cos(x)");
+plt.plot(x, yc);
+
+plt.hline(0.5, "#2ca02c", "dotted");
+plt.hline(-0.5, "#2ca02c", "dotted");
+
+plt.save("test_sincos.svg");
+print "test_sincos.svg genere";
+
+# ── Graphe 2 : y = x^2 + bruit + modele ─────────────────────────────────────
+# setPointSize, superposition scatter + line
+plt.clear();
+srand(42);
+let xs2 = [];
+let ys2 = [];
+let xs2model = [];
+let ys2model = [];
+let k = 0;
+while (k < 80) {
+  let xv = -3.0 + rand() * 6.0;
+  push(xs2, xv);
+  push(ys2, xv * xv + 0.5 * (rand() - 0.5) * 2.0);
+  k++;
+}
+for (let xv = -3.0; xv <= 3.0; xv += 0.25) {
+  push(xs2model, xv);
+  push(ys2model, xv * xv);
+}
+
+plt.setTitle("Nuage : y = x^2 + bruit");
+plt.setLabelX("x");
+plt.setLabelY("y");
+
+plt.setPointSize(4.0);
+plt.setLabel("mesures");
+plt.scatter(xs2, ys2);
+
+plt.setColor("#d62728");
+plt.setLineWidth(2.5);
+plt.setFill("#d62728");
+plt.setLabel("modele x^2");
+plt.plot(xs2model, ys2model);
+
+plt.vline(0.0);
+plt.hline(0.0);
+
+plt.save("test_scatter.svg");
+print "test_scatter.svg genere";
+
+# ── Graphe 3 : comparaison styles de lignes ───────────────────────────────────
+plt.clear();
+let xl = [];
+let y1 = [];
+let y2 = [];
+let y3 = [];
+let j = 0;
+while (j <= 50) {
+  let t = j * 6.28318530 / 50.0;
+  push(xl, t);
+  push(y1, sin(t));
+  push(y2, sin(t) * 0.7);
+  push(y3, sin(t) * 0.4);
+  j++;
+}
+
+plt.setTitle("Styles de lignes");
+plt.setLabelX("t");
+plt.setLabelY("amplitude");
+
+plt.setLineWidth(2.5);
+plt.setLabel("solid");
+plt.plot(xl, y1);
+
+plt.setLineStyle("dashed");
+plt.setLineWidth(2.0);
+plt.setLabel("dashed");
+plt.plot(xl, y2);
+
+plt.setLineStyle("dotted");
+plt.setLineWidth(2.0);
+plt.setLabel("dotted");
+plt.plot(xl, y3);
+
+plt.save("test_styles.svg");
+print "test_styles.svg genere";

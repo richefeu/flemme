@@ -1,0 +1,64 @@
+# interpolation.flm — test de l'interpolation dans les instructions print
+# L'interpolation {expr} fonctionne dans print, pas dans les affectations de chaînes.
+
+fn approx(a, b) {
+  let d = a - b;
+  if (d < 0) { d = -d; }
+  return d < 0.000001;
+}
+
+fn carre(n) { return n * n; }
+fn double(n) { return n * 2; }
+
+# --- variables simples ---
+let x = 42;
+let s = "monde";
+let pi = 3.14159265;
+
+# Ces print ne doivent pas lever d'erreur
+print "{x}";
+print "{s}";
+
+# --- expressions arithmétiques ---
+print "{2 + 3}";
+print "{10 - 4}";
+print "{3 * 7}";
+print "{10 / 4}";
+print "{10 // 3}";
+print "{10 % 3}";
+print "{2 ^ 8}";
+
+# --- appels de fonctions ---
+print "{carre(6)}";
+print "{double(7)}";
+print "{abs(-5)}";
+print "{sqrt(16)}";
+print "{floor(3.9)}";
+print "{ceil(3.1)}";
+
+# --- expression booléenne ---
+print "{2 > 1}";
+print "{1 > 2}";
+
+# --- formatage flottant ---
+print "{pi:.2f}";
+print "{pi:.4f}";
+print "{pi:.6f}";
+
+# --- formatage entier ---
+let n = 42;
+print "{n:d}";
+
+# --- interpolations multiples dans une chaîne ---
+let a = 3;
+let b = 4;
+print "{a}^2 + {b}^2 = {a*a + b*b}";
+
+# --- expression imbriquée ---
+print "{carre(carre(2))}";
+
+# --- interpolation avec str() ---
+assert(str(x) == "42", "str(x) == 42");
+assert(str(3.14) == "3.14", "str(3.14)");
+
+print "interpolation : OK";

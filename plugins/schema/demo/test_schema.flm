@@ -1,0 +1,97 @@
+# test_schema.flm — schémas RDM
+
+# ── Schéma 1 : poutre bi-appuyée avec charge répartie ─────────────────────────
+let s = Schema();
+
+s.poutre(0, 0, 6, 0, 0.18);
+s.appui(0, 0, -1.5708, 0.5);
+s.gris;
+s.articulation(6, 0, -1.5708, 0.5);
+
+# Charge répartie
+s.rouge;
+s.chargeRep(0, 0, 6, 1.2);
+
+# Point d'application d'une réaction
+s.point(0, 0);
+s.point(6, 0);
+
+# Cotes de portée et de hauteur de charge
+s.coteH(0, -0.5, 6, -0.8, "L");
+s.coteV(6.5, 0, 7.5, 1.2, "q");
+
+s.save("schema_biappuye.svg");
+print "-> schema_biappuye.svg";
+
+# ── Schéma 2 : console encastrée avec charge répartie + moment ────────────────
+s.clear();
+
+s.poutre(0, 0, 5, 0, 0.18);
+s.encastrement(0, 0, 3.14159, 0.5);
+
+s.rouge;
+s.chargeRep(0, 0, 5, 1.2);
+
+# Moment au nœud libre
+s.rouge;
+s.moment(5, 0, 0.7, 3.14159, 0.0);
+
+s.coteH(0, -0.5, 5, -0.8, "L");
+
+s.save("schema_console.svg");
+print "-> schema_console.svg";
+
+# ── Schéma 3 : portique avec cotes et repère ──────────────────────────────────
+s.clear();
+
+s.poutre(0, 0, 0, 4, 0.18);
+s.poutre(6, 0, 6, 4, 0.18);
+s.poutre(0, 4, 6, 4, 0.18);
+
+s.appui(0, 0, -1.5708, 0.5);
+s.gris;
+s.articulation(6, 0, -1.5708, 0.5);
+
+# Articulations internes aux nœuds de tête
+s.articul(0, 4, 0.22);
+s.articul(6, 4, 0.22);
+
+# Charge horizontale en tête du poteau gauche
+s.rouge;
+s.force(-1.5, 4, 0, 4);
+
+# Cotes
+s.coteH(0, -0.5, 6, -0.8, "L");
+s.coteV(-1, 0, -1.5, 4, "H");
+
+# Repère en bas à droite
+s.repere(7.2, -0.5, 0.0, 0.8);
+
+s.save("schema_portique.svg");
+print "-> schema_portique.svg";
+
+# ── Schéma 4 : appuiContinu + croix + cote diagonale ─────────────────────────
+s.clear();
+
+# Poutre inclinée
+s.poutre(0, 0, 4, 3, 0.18);
+
+# Appuis continus
+s.appuiContinu(0, 0, -1.5708, 0.4);
+s.gris;
+s.appuiContinu(4, 3, 2.498, 0.4);   # angle ≈ atan2(3,4) + pi/2
+
+# Forces en milieu de portée
+s.rouge;
+s.force(1.9, 1.5, 2.1, 0.8);
+
+# Marqueurs
+s.point(0, 0);
+s.croix(4, 3);
+s.croix(2, 1.5);
+
+# Cote générale (diagonale)
+s.cote(0, 0, 4, 3, "L");
+
+s.save("schema_appuicontinu.svg");
+print "-> schema_appuicontinu.svg";

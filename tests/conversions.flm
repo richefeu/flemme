@@ -1,0 +1,45 @@
+# conversions.flm — num(), str(), type(), conversions implicites
+
+# str() — nombre vers chaîne
+assert(str(42) == "42", "str entier");
+assert(str(3.14) == "3.14", "str flottant");
+assert(str(0) == "0", "str zero");
+assert(str(-7) == "-7", "str negatif");
+# les booléens sont stockés comme des nombres (1/0)
+assert(str(true) == "1", "str booleen vrai");
+assert(str(false) == "0", "str booleen faux");
+
+# num() — chaîne vers nombre
+assert(num("42") == 42, "num entier");
+assert(num("3.14") == 3.14, "num flottant");
+assert(num("0") == 0, "num zero");
+assert(num("-5") == -5, "num negatif");
+
+# aller-retour
+let n = 123;
+assert(num(str(n)) == n, "aller-retour num(str)");
+
+let s = "9.5";
+assert(str(num(s)) == s, "aller-retour str(num)");
+
+# type() après conversion
+assert(type(num("10")) == "nombre", "type apres num");
+assert(type(str(10)) == "chaine", "type apres str");
+
+# arithmetic sur résultat de num()
+let x = num("4") + num("6");
+assert(x == 10, "num + num");
+
+# concatenation sur résultat de str()
+let res = str(10) + str(20);
+assert(res == "1020", "str + str");
+
+# type des littéraux — les booléens sont des nombres en flemme
+assert(type(0) == "nombre", "type 0");
+assert(type(0.0) == "nombre", "type 0.0");
+assert(type(true) == "nombre", "type true est nombre");
+assert(type(false) == "nombre", "type false est nombre");
+assert(type("") == "chaine", "type chaine vide");
+assert(type([]) == "tableau", "type tableau vide");
+
+print "conversions : OK";

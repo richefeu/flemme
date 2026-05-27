@@ -1,0 +1,212 @@
+# demo_schema.flm — démonstration complète du plugin Schema
+# Produit 4 fichiers SVG, un par groupe de fonctionnalités.
+
+let s = Schema();
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 1 · Types de liaisons
+#     → demo_appuis.svg
+# ══════════════════════════════════════════════════════════════════════════════
+# taille() et orientation() dans le style : pas besoin de les répéter à chaque appel.
+
+s.taille(0.4);
+s.orientation(-1.5708);   # sol en bas pour tous
+
+s.noir;
+s.poutre(0, 0, 10, 0, 0.12);
+
+s.articulation(0, 0);
+s.appui(2, 0);
+s.appuiContinu(4, 0);
+s.articul(6, 0);                   # rotule interne, taille prise dans le style
+s.encastrement(10, 0, 0, 0.4);    # sol à droite : angle = 0, args explicites
+
+# profilé UPE au-dessus de la poutre
+s.bleu;
+s.upe(7.5, 0, -1.5708, 0.8);
+
+# labels
+s.gris1;
+s.texte(0,    0.65, "articulation");
+s.texte(2,    0.65, "appui");
+s.texte(4,    0.65, "appuiContinu");
+s.gris0;
+s.texte(6,    0.65, "articul");
+s.texte(8.1,  0.65, "upe");
+s.texte(10,   0.65, "encastrement");
+
+s.save("demo_appuis.svg");
+print "-> demo_appuis.svg";
+s.clear();
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 2 · Charges
+#     → demo_charges.svg
+# ══════════════════════════════════════════════════════════════════════════════
+
+s.noir;
+s.poutre(0, 0, 8, 0, 0.15);
+s.articulation(0, 0, -1.5708, 0.4);
+s.appui(8, 0, -1.5708, 0.4);
+
+# charge répartie en rouge
+s.rouge;
+s.chargeRep(0, 0, 8, 1.5);
+s.texte(4, 1.75, "chargeRep");
+
+# force descendante pleine en bleu (s.plein est le défaut)
+s.bleu;
+s.plein;
+s.tailleVecteur(0.4);
+s.force(2.5, 3.5, 2.5, 0.2);
+s.gris0;
+s.texte(3.0, 2.7, "force  plein");
+
+# force horizontale avec tête ouverte en noir
+s.noir;
+s.ouvert;
+s.tailleVecteur(0.4);
+s.force(9.2, 0, 8.2, 0);
+s.gris0;
+s.texte(9.6, 0.3, "force  ouvert");
+
+# moment concentré en gris1
+s.gris1;
+s.plein;
+s.tailleVecteur(0);
+s.moment(0, 0, 0.8, -1.5708, 1.5708);
+s.gris0;
+s.texte(-1.3, -0.4, "moment");
+
+# repère d'axes XY
+s.noir;
+s.repere(9.5, -1.0, 0, 0.8);
+
+# cote de portée
+s.coteH(0, -0.6, 8, -1.1, "L");
+
+s.save("demo_charges.svg");
+print "-> demo_charges.svg";
+s.clear();
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 3 · Cotes et marqueurs
+#     → demo_cotes.svg
+# ══════════════════════════════════════════════════════════════════════════════
+# Section rectangulaire b×h avec toutes les variantes de cotes.
+
+# contour de la section
+s.noir;
+s.ligne(-2, -3, 2, -3);
+s.ligne(2, -3, 2, 3);
+s.ligne(2, 3, -2, 3);
+s.ligne(-2, 3, -2, -3);
+
+# repère ZY et centre de gravité
+s.bleu;
+s.repereZY(0, 0, 1.4);
+s.noir;
+s.simplecroix(0, 0, 0.1);
+s.texte(0.25, 0.18, "G");
+
+# coteH — largeur totale en bas
+s.noir;
+s.coteH(-2, -3.3, 2, -4.3, "b");
+
+# coteV — demi-hauteur à droite (deux cotes empilées)
+s.coteV(2.3, -3, 3.4, 0,  "h/2");
+s.coteV(2.3, 0,  3.4, 3,  "h/2");
+s.coteV(2.3, -3, 4.6, 3,  "h");
+
+# demicoteV — distance de G au bord inférieur (côté gauche)
+s.rouge;
+s.demicoteV(-2.5, -3, -4.0, 0, "yG");
+
+# demicoteH — demi-largeur depuis le centre vers la droite
+s.bleu;
+s.demicoteH(0, -3.3, 2, -5.0, "b/2");
+
+# cote simple entre deux coins diagonalement opposés
+s.gris1;
+s.cote(-2, -3, 2, 3, "diag");
+
+# marqueurs aux coins
+s.noir;
+s.point(-2, -3);
+s.point(2, -3);
+s.croix(2, 3);
+s.croix(-2, 3);
+
+s.save("demo_cotes.svg");
+print "-> demo_cotes.svg";
+s.clear();
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 4 · Style et primitives
+#     → demo_style.svg
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── Épaisseur de trait ────────────────────────────────────────────────────────
+s.epaisseur(0.5);  s.noir; s.ligne(0, 5.5, 4, 5.5);
+s.epaisseur(1.0);          s.ligne(0, 4.8, 4, 4.8);
+s.epaisseur(2.5);          s.ligne(0, 4.1, 4, 4.1);
+s.epaisseur(1.0);
+s.gris1; s.gauche;
+s.texte(4.2, 5.5, "epaisseur  0.5");
+s.texte(4.2, 4.8, "epaisseur  1.0  (defaut)");
+s.texte(4.2, 4.1, "epaisseur  2.5");
+
+# ── Taille et style de tête de vecteur ───────────────────────────────────────
+s.noir; s.plein;  s.tailleVecteur(0);    s.force(0, 2.8, 3.5, 2.8);
+s.noir; s.plein;  s.tailleVecteur(0.5);  s.force(0, 2.1, 3.5, 2.1);
+s.noir; s.ouvert; s.tailleVecteur(0);    s.force(0, 1.4, 3.5, 1.4);
+s.tailleVecteur(0); s.plein;
+s.gris1;
+s.texte(4.2, 2.8, "plein, tailleVecteur auto");
+s.texte(4.2, 2.1, "plein, tailleVecteur 0.5");
+s.texte(4.2, 1.4, "ouvert, tailleVecteur auto");
+
+# ── Primitives ────────────────────────────────────────────────────────────────
+s.noir;  s.cercle(-3.5, 5, 0.7);
+s.gris1; s.texte(-3.5, 5, "cercle");
+
+s.rouge; s.disque(-3.5, 3, 0.6);
+s.gris1; s.texte(-3.5, 2.3, "disque");
+
+s.bleu;  s.ligne(-5, 1.0, -2, 1.0);
+s.gris1; s.texte(-3.5, 1.3, "ligne");
+
+s.noir;  s.upe(-5, -1.0, -1.5708, 1.2);
+s.gris1; s.texte(-3.8, -0.1, "upe");
+
+# ── Alignement du texte ───────────────────────────────────────────────────────
+s.gris0; s.ligne(-7, 3.5, -7, 0.5);   # ligne de référence
+
+s.noir;
+s.gauche;  s.texte(-7, 3.0, "| gauche");
+s.centre;  s.texte(-7, 2.2, "| centre |");
+s.droite;  s.texte(-7, 1.4, "droite |");
+s.centre;
+
+# ── Palette de couleurs ───────────────────────────────────────────────────────
+# fond gris0 derrière le swatch "blanc" pour le rendre visible
+s.gris0; s.disque(-7.5, -0.5, 0.22);
+# swatches
+s.blanc; s.simplecroix(-7.5, -0.5, 0.14);
+s.gris0; s.simplecroix(-7.5, -1.2, 0.14);
+s.gris1; s.simplecroix(-7.5, -1.9, 0.14);
+s.noir;  s.simplecroix(-7.5, -2.6, 0.14);
+s.rouge; s.simplecroix(-7.5, -3.3, 0.14);
+s.bleu;  s.simplecroix(-7.5, -4.0, 0.14);
+# labels
+s.noir; s.gauche;
+s.texte(-7.1, -0.5, "blanc  (#ffffff)");
+s.texte(-7.1, -1.2, "gris0  (#aaaaaa)");
+s.texte(-7.1, -1.9, "gris1  (#666666)");
+s.texte(-7.1, -2.6, "noir   (#111111)");
+s.texte(-7.1, -3.3, "rouge  (#cc2222)");
+s.texte(-7.1, -4.0, "bleu   (#2266cc)");
+s.centre;
+
+s.save("demo_style.svg");
+print "-> demo_style.svg";

@@ -1,0 +1,42 @@
+# variables.flm — affectation, types, portée, opérateurs composés
+
+let x = 42;
+assert(x == 42, "init entier");
+
+let s = "bonjour";
+assert(s == "bonjour", "init chaine");
+
+let b = true;
+assert(b == true, "init booleen");
+
+let t = [1, 2, 3];
+assert(len(t) == 3, "init tableau");
+
+# réaffectation
+x = 100;
+assert(x == 100, "reaffectation");
+
+# opérateurs composés
+let n = 10;
+n += 5;
+assert(n == 15, "+= ");
+n -= 3;
+assert(n == 12, "-= ");
+n *= 2;
+assert(n == 24, "*= ");
+n /= 4;
+assert(n == 6, "/= ");
+
+# incrément / décrément
+n++;
+assert(n == 7, "i++");
+n--;
+assert(n == 6, "i--");
+
+# type()
+assert(type(42) == "nombre", "type nombre");
+assert(type("x") == "chaine", "type chaine");
+assert(type(true) == "nombre", "type booleen stocke comme nombre");
+assert(type([]) == "tableau", "type tableau");
+
+print "variables : OK";

@@ -1,0 +1,62 @@
+# chaines.flm — fonctions sur les chaînes
+
+let s = "  Bonjour, Monde!  ";
+
+# trim
+let t = trim(s);
+assert(t == "Bonjour, Monde!", "trim");
+
+# upper / lower
+assert(upper("hello") == "HELLO", "upper");
+assert(lower("WORLD") == "world", "lower");
+assert(upper(lower("MiXeD")) == "MIXED", "upper(lower)");
+
+# len sur chaîne
+assert(len("abcde") == 5, "len chaine");
+assert(len("") == 0, "len vide");
+assert(len("abc") == 3, "len 3");
+
+# concaténation
+let a = "foo";
+let b = "bar";
+assert(a + b == "foobar", "concat");
+assert("x" + "" == "x", "concat vide");
+assert("" + "y" == "y", "concat vide gauche");
+
+# find
+assert(find("abcdef", "cd") == 2, "find existe");
+assert(find("abcdef", "xy") == -1, "find absent");
+assert(find("aaaa", "aa") == 0, "find debut");
+assert(find("hello world", "world") == 6, "find milieu");
+
+# replace
+assert(replace("hello world", "world", "flemme") == "hello flemme", "replace");
+assert(replace("aaa", "a", "b") == "bbb", "replace tous");
+assert(replace("abc", "x", "y") == "abc", "replace absent");
+
+# split
+let parts = split("un,deux,trois", ",");
+assert(len(parts) == 3, "split longueur");
+assert(parts[0] == "un", "split[0]");
+assert(parts[1] == "deux", "split[1]");
+assert(parts[2] == "trois", "split[2]");
+
+# split sans séparateur trouvé → 1 élément
+let seul = split("abc", ";");
+assert(len(seul) == 1, "split sans sep");
+assert(seul[0] == "abc", "split sans sep valeur");
+
+# split sur espace
+let mots = split("a b c", " ");
+assert(len(mots) == 3, "split espace");
+assert(mots[2] == "c", "split espace dernier");
+
+# comparaisons de chaînes
+assert("abc" == "abc", "egalite");
+assert("abc" != "xyz", "inegalite");
+assert("abc" < "abd", "inferieur");
+assert("z" > "a", "superieur");
+assert("abc" <= "abc", "inferieur ou egal");
+assert("abd" >= "abc", "superieur ou egal");
+
+print "chaines : OK";

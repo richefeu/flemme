@@ -1,0 +1,39 @@
+# Test de la saisie utilisateur : input(), num(), str()
+
+print "=== Saisie d'un texte ===";
+
+let prenom = input("Ton prénom : ");
+print "Bonjour, {prenom} !";
+
+print "";
+print "=== Saisie et conversion numérique ===";
+
+let saisie = input("Entre un entier positif : ");
+let n = num(saisie);
+
+let carre = n * n;
+print "{n} au carré = {carre}";
+
+print "";
+print "=== Table de multiplication ===";
+
+let saisie2 = input("Table de quel nombre ? ");
+let m = num(saisie2);
+
+for (let i = 1; i <= 10; i++) {
+  let resultat = m * i;
+  print "{m} x {i} = {resultat}";
+}
+
+print "";
+print "=== num() et str() ===";
+
+let s = str(42);
+let t = str(3.14);
+print "str(42)   = {s}";
+print "str(3.14) = {t}";
+
+let x = num("123");
+let y = num("4.5");
+let somme = x + y;
+print "num(\"123\") + num(\"4.5\") = {somme}";
