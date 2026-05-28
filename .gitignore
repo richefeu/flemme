@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+Icon
+Icon?
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+flemme
+flemme-web
+
+# Vendor / dependencies (downloaded at build time)
+vendor/httplib.h
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test artifacts
+*.out
+*.log
