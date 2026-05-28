@@ -13,11 +13,14 @@
 #   make clean                     supprime tous les fichiers générés
 
 # ------------------------------------------------
-# Outils
+# Outils et fonctions
 # ------------------------------------------------
 CXX      := g++
 AR       := ar
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2
+
+# Fonction helper : convertir en majuscules
+upper = $(shell echo $(1) | tr a-z A-Z)
 
 # ------------------------------------------------
 # Interpréteur (headers-only sauf main.cpp)
@@ -28,55 +31,33 @@ INTERP_OBJ     := main.o
 BIN            := flemme
 
 # ------------------------------------------------
-# Plugins — désactiver avec DISABLE_X=1
+# Plugins — liste et config généralisée
 # ------------------------------------------------
-DISABLE_TIMER        ?= 0
-DISABLE_STATS        ?= 0
-DISABLE_MOCKROCKABLE ?= 0
-DISABLE_PLOTSVG      ?= 0
-DISABLE_SCHEMA       ?= 0
+# Pour ajouter un plugin : ajouter son nom à PLUGINS ci-dessous,
+# puis créer plugins/<name>/ avec Makefile et <name>_plugin.hpp
+PLUGINS := timer stats mockrockable plotsvg schema
 
-PLUGIN_TIMER_DIR        := plugins/timer
-PLUGIN_STATS_DIR        := plugins/stats
-PLUGIN_MOCKROCKABLE_DIR := plugins/mockrockable
-PLUGIN_PLOTSVG_DIR      := plugins/plotsvg
-PLUGIN_SCHEMA_DIR       := plugins/schema
+# Désactiver un plugin avec DISABLE_<NAME>=1 (majuscules, ex: DISABLE_TIMER=1)
+$(foreach P,$(PLUGINS),$(eval DISABLE_$(call upper,$(P)) ?= 0))
 
-PLUGIN_TIMER_LIB        := $(PLUGIN_TIMER_DIR)/libflemme-timer.a
-PLUGIN_STATS_LIB        := $(PLUGIN_STATS_DIR)/libflemme-stats.a
-PLUGIN_MOCKROCKABLE_LIB := $(PLUGIN_MOCKROCKABLE_DIR)/libflemme-mockrockable.a
-PLUGIN_PLOTSVG_LIB      := $(PLUGIN_PLOTSVG_DIR)/libflemme-plotsvg.a
-PLUGIN_SCHEMA_LIB       := $(PLUGIN_SCHEMA_DIR)/libflemme-schema.a
+# Générer les chemins et libs pour chaque plugin
+$(foreach P,$(PLUGINS),\
+  $(eval PLUGIN_$(call upper,$(P))_DIR := plugins/$(P))\
+  $(eval PLUGIN_$(call upper,$(P))_LIB := plugins/$(P)/libflemme-$(P).a)\
+)
 
+# Générer les flags (libs, includes, defines) pour les plugins actifs
 PLUGIN_LIBS :=
 PLUGIN_INCS :=
 PLUGIN_DEFS :=
 
-ifneq ($(DISABLE_TIMER),1)
-  PLUGIN_LIBS += $(PLUGIN_TIMER_LIB)
-  PLUGIN_INCS += -I$(PLUGIN_TIMER_DIR)
-  PLUGIN_DEFS += -DFLEMME_PLUGIN_TIMER
-endif
-ifneq ($(DISABLE_STATS),1)
-  PLUGIN_LIBS += $(PLUGIN_STATS_LIB)
-  PLUGIN_INCS += -I$(PLUGIN_STATS_DIR)
-  PLUGIN_DEFS += -DFLEMME_PLUGIN_STATS
-endif
-ifneq ($(DISABLE_MOCKROCKABLE),1)
-  PLUGIN_LIBS += $(PLUGIN_MOCKROCKABLE_LIB)
-  PLUGIN_INCS += -I$(PLUGIN_MOCKROCKABLE_DIR)
-  PLUGIN_DEFS += -DFLEMME_PLUGIN_MOCKROCKABLE
-endif
-ifneq ($(DISABLE_PLOTSVG),1)
-  PLUGIN_LIBS += $(PLUGIN_PLOTSVG_LIB)
-  PLUGIN_INCS += -I$(PLUGIN_PLOTSVG_DIR)
-  PLUGIN_DEFS += -DFLEMME_PLUGIN_PLOTSVG
-endif
-ifneq ($(DISABLE_SCHEMA),1)
-  PLUGIN_LIBS += $(PLUGIN_SCHEMA_LIB)
-  PLUGIN_INCS += -I$(PLUGIN_SCHEMA_DIR)
-  PLUGIN_DEFS += -DFLEMME_PLUGIN_SCHEMA
-endif
+$(foreach P,$(PLUGINS),\
+  $(if $(filter 0,$(DISABLE_$(call upper,$(P)))),\
+    $(eval PLUGIN_LIBS += $(PLUGIN_$(call upper,$(P))_LIB))\
+    $(eval PLUGIN_INCS += -I$(PLUGIN_$(call upper,$(P))_DIR))\
+    $(eval PLUGIN_DEFS += -DFLEMME_PLUGIN_$(call upper,$(P)))\
+  )\
+)
 
 # ------------------------------------------------
 # Flags finaux (interpréteur)
@@ -84,29 +65,24 @@ endif
 ALL_CXXFLAGS := $(CXXFLAGS) $(PLUGIN_INCS) $(PLUGIN_DEFS)
 
 # ------------------------------------------------
-# Plugins désactivés pour flemme-web uniquement
+# Plugins désactivés pour flemme-web seulement
 # Indépendants des DISABLE_* (qui agissent sur les deux binaires).
 # Un plugin WEBIDE_DISABLE peut rester compilé/lié mais ne sera pas
-# enregistré par le serveur web.
+# enregistré par le serveur web. Utiliser les majuscules: WEBIDE_DISABLE_TIMER=1
 # ------------------------------------------------
-WEBIDE_DISABLE_TIMER        ?= 0
-WEBIDE_DISABLE_STATS        ?= 0
-WEBIDE_DISABLE_MOCKROCKABLE ?= 1
-WEBIDE_DISABLE_PLOTSVG      ?= 0
+# Valeurs par défaut (mockrockable est désactivé dans le web par défaut)
+$(foreach P,$(PLUGINS),\
+  $(eval WEBIDE_DISABLE_$(call upper,$(P)) ?= $(if $(call upper,$(P)),0))\
+)
+# Oui, mockrockable=1 par défaut (exception)
+WEBIDE_DISABLE_MOCKROCKABLE := 1
 
 WEBIDE_PLUGIN_DEFS :=
-ifneq ($(WEBIDE_DISABLE_TIMER),0)
-  WEBIDE_PLUGIN_DEFS += -DWEBIDE_NO_PLUGIN_TIMER
-endif
-ifneq ($(WEBIDE_DISABLE_STATS),0)
-  WEBIDE_PLUGIN_DEFS += -DWEBIDE_NO_PLUGIN_STATS
-endif
-ifneq ($(WEBIDE_DISABLE_MOCKROCKABLE),0)
-  WEBIDE_PLUGIN_DEFS += -DWEBIDE_NO_PLUGIN_MOCKROCKABLE
-endif
-ifneq ($(WEBIDE_DISABLE_PLOTSVG),0)
-  WEBIDE_PLUGIN_DEFS += -DWEBIDE_NO_PLUGIN_PLOTSVG
-endif
+$(foreach P,$(PLUGINS),\
+  $(if $(filter 1,$(WEBIDE_DISABLE_$(call upper,$(P)))),\
+    $(eval WEBIDE_PLUGIN_DEFS += -DWEBIDE_NO_PLUGIN_$(call upper,$(P)))\
+  )\
+)
 
 # ------------------------------------------------
 # Web IDE (flemme-web)
@@ -147,21 +123,14 @@ PLUGIN_HEADERS := $(wildcard plugins/*/*.hpp)
 $(INTERP_OBJ): $(INTERP_SRC) $(INTERP_HEADERS) $(PLUGIN_HEADERS)
 	$(CXX) $(ALL_CXXFLAGS) -c $(INTERP_SRC) -o $@
 
-## Bibliothèques de plugins (chacune déclenchée par ses dépendants)
-$(PLUGIN_TIMER_LIB):
-	$(MAKE) -C $(PLUGIN_TIMER_DIR)
+## Bibliothèques de plugins — cibles générées dynamiquement
+# Pour chaque plugin, générer une cible explicite <lib>: <dir>/Makefile
+define PLUGIN_BUILD_RULE
+$(PLUGIN_$(call upper,$(1))_LIB):
+	$$(MAKE) -C plugins/$(1)
+endef
 
-$(PLUGIN_STATS_LIB):
-	$(MAKE) -C $(PLUGIN_STATS_DIR)
-
-$(PLUGIN_MOCKROCKABLE_LIB):
-	$(MAKE) -C $(PLUGIN_MOCKROCKABLE_DIR)
-
-$(PLUGIN_PLOTSVG_LIB):
-	$(MAKE) -C $(PLUGIN_PLOTSVG_DIR)
-
-$(PLUGIN_SCHEMA_LIB):
-	$(MAKE) -C $(PLUGIN_SCHEMA_DIR)
+$(foreach P,$(PLUGINS),$(eval $(call PLUGIN_BUILD_RULE,$(P))))
 
 ## Lancer un script de test
 SCRIPT ?= test.flm
@@ -189,24 +158,27 @@ web: plugins $(WEBIDE_BIN)
 ## Nettoyage ───────────────────────────────────────────────────────────────────
 clean:
 	rm -f $(INTERP_OBJ) $(BIN) $(WEBIDE_OBJ) $(WEBIDE_BIN)
-	$(MAKE) -C $(PLUGIN_TIMER_DIR) clean
-	$(MAKE) -C $(PLUGIN_STATS_DIR) clean
-	$(MAKE) -C $(PLUGIN_MOCKROCKABLE_DIR) clean
-	$(MAKE) -C $(PLUGIN_PLOTSVG_DIR) clean
-	$(MAKE) -C $(PLUGIN_SCHEMA_DIR) clean
+	@for plugin in $(PLUGINS); do $(MAKE) -C plugins/$$plugin clean; done
 
 ## Aide ────────────────────────────────────────────────────────────────────────
 help:
 	@echo "Usage :"
 	@echo "  make                           compile plugins actifs + flemme"
-	@echo "  make DISABLE_TIMER=1           compile sans le plugin Timer"
-	@echo "  make DISABLE_STATS=1           compile sans le plugin Stats"
-	@echo "  make DISABLE_MOCKROCKABLE=1    compile sans le plugin MockRockable"
-	@echo "  make DISABLE_PLOTSVG=1         compile sans le plugin PlotSVG"
-	@echo "  make WEBIDE_DISABLE_STATS=1          desactive Stats dans flemme-web seulement"
-	@echo "  make WEBIDE_DISABLE_MOCKROCKABLE=0   reactive MockRockable dans flemme-web"
-	@echo "  make plugins                         compile uniquement les .a actifs"
-	@echo "  make test                      lance ./flemme test.flm"
-	@echo "  make test SCRIPT=foo.flm       lance ./flemme foo.flm"
-	@echo "  make web                       build + lance le Web IDE"
-	@echo "  make clean                     supprime tous les fichiers générés"
+	@echo ""
+	@echo "  Désactiver un plugin à la compilation :"
+	@echo "    make DISABLE_<plugin>=1      ex: make DISABLE_TIMER=1"
+	@echo "    Plugins disponibles: $(PLUGINS)"
+	@echo ""
+	@echo "  Désactiver un plugin dans flemme-web seulement :"
+	@echo "    make WEBIDE_DISABLE_<plugin>=1 ou =0"
+	@echo ""
+	@echo "  Autres cibles :"
+	@echo "    make plugins                compile uniquement les .a actifs"
+	@echo "    make test                   lance ./flemme test.flm"
+	@echo "    make test SCRIPT=foo.flm    lance ./flemme foo.flm"
+	@echo "    make web                    build + lance le Web IDE"
+	@echo "    make clean                  supprime tous les fichiers générés"
+	@echo ""
+	@echo "  Pour ajouter un plugin :"
+	@echo "    1. Créer plugins/<name>/Makefile et <name>_plugin.hpp"
+	@echo "    2. Ajouter '<name>' à PLUGINS dans ce Makefile"
